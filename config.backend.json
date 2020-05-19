@@ -1,0 +1,17 @@
+{
+	"server"    : {
+		"port": 9003,
+		"host": "0.0.0.0"
+	},
+	"db"        : {
+		"dbName"    : "cfg_ts",
+		"dbUser"    : "postgres",
+		"dbPassword": "gopniki6650556",
+		"dbHost"    : "localhost",
+		"dbPort"    : 5432
+	},
+	"session"   : {
+		"secret": "testsecret"
+	},
+	"firstLaunch": true
+}
