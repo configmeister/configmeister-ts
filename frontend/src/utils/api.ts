@@ -1,7 +1,7 @@
-import {ICreateUser}                                from '../../../common/data-types';
-import axios                                        from 'axios';
-import {API_ENDPOINT, API_VERSION, USER_API_PREFIX} from '../../../common/endpoints';
-import {logger}                                     from '@/utils/logger';
+import {ICreateUser}                                                          from '../../../common/data-types';
+import axios                                                                  from 'axios';
+import {API_ENDPOINT, API_VERSION, CONFIGURATION_API_PREFIX, USER_API_PREFIX} from '../../../common/endpoints';
+import {logger}                                                               from '@/utils/logger';
 
 export type ApiAnswer = Promise<any | { error: boolean, message: string }>
 
@@ -40,6 +40,36 @@ export const API = {
 		try {
 			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/login-user`, {
 				...user,
+			});
+			return res.data;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	},
+
+	async fetchUserData(): ApiAnswer {
+		try {
+			const res = await axios.get(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/fetch-data`);
+			return res.data;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	},
+
+	async createConfiguration({name, version, branches}: { name: string, version: string, branches: string[] }): ApiAnswer {
+		try {
+			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/create-new`, {
+				name,
+				version,
+				branches,
 			});
 			return res.data;
 		} catch (e) {

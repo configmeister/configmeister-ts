@@ -30,4 +30,16 @@ export async function InitUserAPI() {
 		await req.session.save(nop);
 		res.json(req.session.user);
 	});
+
+	app.get(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/fetch-data`, async (req, res) => {
+		if (!req.session || !req.session.user || !req.session.user.loggedIn) {
+			res.json({
+				error:   true,
+				message: 'user not authed',
+			});
+			return;
+		}
+		res.json(req.session.user);
+	});
+
 }

@@ -4,6 +4,7 @@ import {InitStaticMiddleware}       from './static.mw';
 import {InitCookieParserMiddleware} from './cookie-parser.mw';
 import {InitBodyParserMiddleware}   from './body-parser.mw';
 import {InitCorsMiddleware}         from './cors.mw';
+import {InitAuthOrKeyMiddleware}    from './auth-or-key';
 
 export async function InitMiddlewares() {
 	await InitCorsMiddleware();
@@ -12,4 +13,5 @@ export async function InitMiddlewares() {
 	await InitSessionMiddleware();
 	await InitRoutesMiddleware();
 	await InitStaticMiddleware();
+	await InitAuthOrKeyMiddleware();
 }

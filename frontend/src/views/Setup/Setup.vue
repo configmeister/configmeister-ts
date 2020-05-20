@@ -1,6 +1,6 @@
 <template>
 	<layout-center>
-		<v-card width="600">
+		<v-card width="512">
 			<v-card-title>Setup the admin user</v-card-title>
 			<v-card-text>
 				Please setup the admin user. You will need an admin user to create new users.

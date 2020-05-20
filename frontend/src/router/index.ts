@@ -1,21 +1,26 @@
 import Vue                      from 'vue';
 import VueRouter, {RouteConfig} from 'vue-router';
 import Main                     from '../views/Main/Main.vue';
+import {ROOTS}                  from '@/utils/roots';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [{
-	path:      '/',
+	path:      ROOTS.MAIN,
 	name:      'main',
 	component: Main,
 }, {
-	path:      '/login',
+	path:      ROOTS.LOGIN,
 	name:      'login',
-	component: () => import(/* webpackChunkName: "about" */ '../views/Login/Login.vue'),
+	component: () => import(/* webpackChunkName: "login" */ '../views/Login/Login.vue'),
 }, {
-	path:      '/setup',
+	path:      ROOTS.SETUP,
 	name:      'setup',
-	component: () => import(/* webpackChunkName: "about" */ '../views/Setup/Setup.vue'),
+	component: () => import(/* webpackChunkName: "setup" */ '../views/Setup/Setup.vue'),
+}, {
+	path:      ROOTS.CREATE_CONFIGURATION,
+	name:      'create-configuration',
+	component: () => import(/* webpackChunkName: "createConfiguration" */ '../views/CreateConfiguration/CreateConfiguration.vue'),
 }];
 
 const router = new VueRouter({

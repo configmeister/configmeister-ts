@@ -1,6 +1,7 @@
-import {app}          from '../server';
-import {join}         from 'path';
-import {UserResolver} from '../resolvers/user.resolver';
+import {app}                   from '../server';
+import {join}                  from 'path';
+import {UserResolver}          from '../resolvers/user.resolver';
+import {ConfigurationResolver} from '../resolvers/configuration.resolver';
 
 export interface IRoute {
 	path: string;
@@ -25,6 +26,31 @@ const ROUTES: IRoute[] = [{
 			} else {
 				next();
 			}
+		},
+	],
+}, {
+	path:            '/logout',
+	customResolvers: [
+		async (req, res) => {
+			delete req.session.user;
+			await req.session.save();
+			res.redirect('/login');
+		},
+	],
+}, {
+	path:     '/create-configuration',
+	needAuth: true,
+}, {
+	path:            '/configuration/:id',
+	needAuth:        true,
+	customResolvers: [
+		async (req, res, next) => {
+			const isConfigValid = await ConfigurationResolver.DoConfigExists(parseInt(req.params.id));
+			if (isConfigValid) {
+				return next();
+			}
+			res.status(404);
+			next();
 		},
 	],
 }];

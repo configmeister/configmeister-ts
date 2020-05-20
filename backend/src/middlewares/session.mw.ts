@@ -7,8 +7,8 @@ export async function InitSessionMiddleware() {
 	const ConnectPgSimple = ConnectPgSimpleConst(session);
 
 	app.use(session({
-		secret:           config.session.secret,
-		store:            new ConnectPgSimple({
+		secret:            config.session.secret,
+		store:             new ConnectPgSimple({
 			tableName: 'sessions',
 			conObject: {
 				user:     config.db.dbUser,
@@ -18,9 +18,9 @@ export async function InitSessionMiddleware() {
 				password: config.db.dbPassword,
 			},
 		}),
-		saveUninitialezd: false,
-		resave:           true,
-		cookie:           {
+		saveUninitialized: false,
+		resave:            true,
+		cookie:            {
 			maxAge: 100 * 60 * 60 * 24 * 7,
 		},
 	}));

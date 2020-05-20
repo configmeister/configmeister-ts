@@ -1,0 +1,3 @@
+export enum ERROR {
+	CONFIGURATION_NAME_NOT_UNIQUE
+}
