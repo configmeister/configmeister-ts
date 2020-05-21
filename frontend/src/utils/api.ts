@@ -64,6 +64,34 @@ export const API = {
 		}
 	},
 
+	async fetchConfigurations(): ApiAnswer {
+		try {
+			const res = await axios.get(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/fetch-all`);
+			return res.data;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	},
+
+	async deleteConfiguration(id: number): ApiAnswer {
+		try {
+			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/delete-configuration`, {
+				id,
+			});
+			return res.data;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	},
+
 	async createConfiguration({name, version, branches}: { name: string, version: string, branches: string[] }): ApiAnswer {
 		try {
 			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/create-new`, {

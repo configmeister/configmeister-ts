@@ -11,7 +11,7 @@
 					<v-btn class="btn" small color="error" text v-on="on">Delete</v-btn>
 				</template>
 				<v-card>
-					<v-card-title>Are you sure want to delete {{name}}?</v-card-title>
+					<v-card-title>Are you sure want to delete "{{name}}"?</v-card-title>
 					<v-card-text>
 						This action is permament.
 					</v-card-text>
@@ -29,17 +29,22 @@
 </template>
 
 <script lang="ts">
-	import Vue       from 'vue';
-	import Component from 'vue-class-component';
-	import {Prop}    from 'vue-property-decorator';
-	import moment    from 'moment';
-	import {ROOTS}   from '@/utils/roots';
+	import Vue                from 'vue';
+	import Component          from 'vue-class-component';
+	import {Prop}             from 'vue-property-decorator';
+	import moment             from 'moment';
+	import {ROOTS}            from '@/utils/roots';
+	import {Action}           from 'vuex-class';
+	import {CONFIG_ACTIONS}   from '@/utils/store/config.store';
+	import {CONFIG_NAMESPACE} from '@/utils/store/store';
 
 	@Component
 	export default class ConfigurationCard extends Vue {
 		@Prop({required: true}) name: string | undefined;
 		@Prop({required: true}) id: number | undefined;
 		@Prop({required: true}) updatedAt: Date | undefined;
+
+		@Action(CONFIG_ACTIONS.DELETE_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) deleteConfig: any;
 
 		private deleteDialogShown: boolean = false;
 		private deleteInProcess: boolean = false;
@@ -53,12 +58,10 @@
 		}
 
 		async deleteConfiguration() {
-			// @todo add configuration deletion and store update
 			this.deleteInProcess = true;
-			setTimeout(() => {
-				this.deleteInProcess = false;
-				this.deleteDialogShown = false;
-			}, 1000);
+			await this.deleteConfig(this.id);
+			this.deleteInProcess = false;
+			this.deleteDialogShown = false;
 		}
 
 	}

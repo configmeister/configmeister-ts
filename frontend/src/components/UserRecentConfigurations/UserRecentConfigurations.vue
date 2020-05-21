@@ -3,7 +3,7 @@
 		<div class="title mb-3">Recent configurations:</div>
 		<template v-if="configs.recent.length">
 			<v-layout class="configs-row">
-
+				<configuration-card v-for="config in configs.recent" :key="config.id" v-bind="config"></configuration-card>
 			</v-layout>
 		</template>
 		<template v-else>
@@ -20,8 +20,11 @@
 	import {State}            from 'vuex-class';
 	import {CONFIG_NAMESPACE} from '@/utils/store/store';
 	import {ConfigState}      from '@/utils/store/config.store';
+	import ConfigurationCard  from '@/components/ConfigurationCard/ConfigurationCard.vue';
 
-	@Component
+	@Component({
+		components: {ConfigurationCard},
+	})
 	export default class UserRecentConfigurations extends Vue {
 		@State(CONFIG_NAMESPACE) configs: ConfigState | undefined;
 
