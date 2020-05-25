@@ -28,3 +28,14 @@ export interface ICreateBranch {
 	name: string,
 	versionId: number
 }
+
+export enum EScalarType {
+	BOOLEAN = 'boolean',
+	STRING  = 'string',
+	NUMBER  = 'number',
+}
+
+export enum EComplexType {
+	ARRAY  = 'array',
+	OBJECT = 'object'
+}

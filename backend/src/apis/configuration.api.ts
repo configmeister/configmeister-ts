@@ -2,6 +2,8 @@ import {app}                                                 from '../server';
 import {API_ENDPOINT, API_VERSION, CONFIGURATION_API_PREFIX} from '../../../common/endpoints';
 import {ConfigurationResolver}                               from '../resolvers/configuration.resolver';
 import {ConfigCard}                                          from '../../../common/data-types';
+import {NODE_TYPE}                                           from '../../../frontend/src/utils/store/config.store';
+import {BranchResolver}                                      from '../resolvers/branch.resolver';
 
 export async function InitConfigurationApi() {
 	app.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/create-new`, async (req, res) => {
@@ -28,5 +30,37 @@ export async function InitConfigurationApi() {
 	app.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/get-full`, async (req, res) => {
 		const result = await ConfigurationResolver.GetFull(req.body.id);
 		return res.json(result);
+	});
+
+	app.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/validate-value-to-be-added`, async (req, res) => {
+		let target = req.body.target;
+		let result;
+		switch (target.nodeType) {
+			case NODE_TYPE.ROOT:
+				result = await BranchResolver.ValidateValue(target, req.body.node);
+				break;
+			default:
+				result = {
+					error:   true,
+					message: 'Unknown target',
+				};
+		}
+		res.json(result);
+	});
+
+	app.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/add-value`, async (req, res) => {
+		let target = req.body.target;
+		let result;
+		switch (target.nodeType) {
+			case NODE_TYPE.ROOT:
+				result = await BranchResolver.AddValue(target, req.body.node);
+				break;
+			default:
+				result = {
+					error:   true,
+					message: 'Unknown target',
+				};
+		}
+		res.json(result);
 	});
 }

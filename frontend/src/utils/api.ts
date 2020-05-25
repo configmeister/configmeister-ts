@@ -2,6 +2,7 @@ import {ICreateUser}                                                          fr
 import axios                                                                  from 'axios';
 import {API_ENDPOINT, API_VERSION, CONFIGURATION_API_PREFIX, USER_API_PREFIX} from '../../../common/endpoints';
 import {logger}                                                               from '@/utils/logger';
+import {INode}                                                                from '@/utils/store/config.store';
 
 export type ApiAnswer = Promise<any | { error: boolean, message: string }>
 
@@ -112,6 +113,42 @@ export const API = {
 	async getFullConfiguration(id: number): ApiAnswer {
 		try {
 			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/get-full`, {id});
+			return res.data;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	},
+
+	async validateValueToBeAdded(target: INode | undefined, nodeToAdd: { nodeType: string, nodeKey: string, itemType: string, itemValue?: string }): ApiAnswer {
+		try {
+			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/validate-value-to-be-added`, {
+				target,
+				node: {
+					...nodeToAdd,
+				},
+			});
+			return res.data;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	},
+
+	async addValue(target: INode | undefined, nodeToAdd: { nodeType: string, nodeKey: string, itemType: string, itemValue?: string }): ApiAnswer {
+		try {
+			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/add-value`, {
+				target,
+				node: {
+					...nodeToAdd,
+				},
+			});
 			return res.data;
 		} catch (e) {
 			logger.error(e.message);
