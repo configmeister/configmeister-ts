@@ -6,8 +6,40 @@ import {ERROR}                            from '../../../common/errors';
 import {ConfigCard, ICreateConfiguration} from '../../../common/data-types';
 import {Op}                               from 'sequelize';
 import {VersionResolver}                  from './version.resolver';
+import {Configuration}                    from '../../../frontend/src/utils/store/config.store';
 
 export class ConfigurationResolver {
+	public static async GetFull(id: number): Promise<Configuration> {
+		const res = await ConfigurationModel.findOne({
+			where:   {
+				id,
+			},
+			include: [{
+				model:   VersionModel,
+				include: [{
+					model: BranchModel,
+				}],
+			}],
+		});
+		return {
+			id:        res.id,
+			name:      res.name,
+			updatedAt: res.updatedAt,
+			versions:  res.versions.map(version => {
+				return {
+					id:       version.id,
+					label:    version.label,
+					branches: version.branches.map(branch => {
+						return {
+							id:   branch.id,
+							name: branch.name,
+						};
+					}),
+				};
+			}),
+		};
+	}
+
 	public static async Destroy(id: number): Promise<boolean> {
 		const versionIds = (await ConfigurationModel.findOne({
 			where:   {

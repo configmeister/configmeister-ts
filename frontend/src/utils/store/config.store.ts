@@ -1,30 +1,71 @@
-import {ActionTree, Module, MutationTree} from 'vuex';
-import {RootState}                        from '@/utils/store/store';
-import {API}                              from '@/utils/api';
-import {ConfigCard}                       from '../../../../common/data-types';
+import {ActionTree, GetterTree, Module, MutationTree} from 'vuex';
+import {RootState}                                    from '@/utils/store/store';
+import {API}                                          from '@/utils/api';
+import {ConfigCard}                                   from '../../../../common/data-types';
 
+
+export enum NODE_TYPE {
+	ROOT
+}
+
+export interface INode {
+	id?: number,
+	name?: string,
+	nodeType: NODE_TYPE,
+	children?: INode[],
+}
+
+export interface Branch {
+	id: number;
+	name: string;
+}
+
+export interface Version {
+	id: number;
+	label: string;
+	branches: Branch[];
+}
 
 export interface Configuration {
-	id: number,
-	name: string,
-	updatedAt: Date,
+	id: number;
+	name: string;
+	updatedAt: Date;
+	versions: Version[];
 }
 
 export interface ConfigState {
 	recent: ConfigCard[];
 	list: ConfigCard[];
 	current: Configuration | null;
+	selectedValue: INode[];
 }
 
 export const state: ConfigState = {
-	recent:  [],
-	list:    [],
-	current: null,
+	recent:        [],
+	list:          [],
+	current:       null,
+	selectedValue: [],
+};
+
+export enum CONFIG_GETTERS {
+	CURRENT_CONFIGURATION = 'currentConfiguration',
+	SELECTED_VALUE        = 'selectedValue',
+}
+
+export const getters: GetterTree<ConfigState, RootState> = {
+	[CONFIG_GETTERS.CURRENT_CONFIGURATION](state): Configuration | null {
+		return state.current;
+	},
+	[CONFIG_GETTERS.SELECTED_VALUE](state): INode | undefined {
+		return state.selectedValue[0];
+	},
 };
 
 export enum CONFIG_MUTATIONS {
 	SET_INITIAL_DATA             = 'setInitialData',
-	REMOVE_DELETED_CONFIGURATION = 'removeDeletedConfiguration'
+	REMOVE_DELETED_CONFIGURATION = 'removeDeletedConfiguration',
+	SET_CURRENT_CONFIGURATION    = 'setCurrentConfiguration',
+	SET_CURRENT_SELECTED_VALUE   = 'setCurrentSelectedValue'
 }
 
 export const mutations: MutationTree<ConfigState> = {
@@ -41,6 +82,12 @@ export const mutations: MutationTree<ConfigState> = {
 		if (recentIdx !== -1) {
 			state.recent.splice(recentIdx, 1);
 		}
+	},
+	[CONFIG_MUTATIONS.SET_CURRENT_CONFIGURATION](state, cfg: Configuration) {
+		state.current = cfg;
+	},
+	[CONFIG_MUTATIONS.SET_CURRENT_SELECTED_VALUE](state, value: INode[]) {
+		state.selectedValue = value;
 	},
 };
 
@@ -63,7 +110,13 @@ export const actions: ActionTree<ConfigState, RootState> = {
 		commit(CONFIG_MUTATIONS.REMOVE_DELETED_CONFIGURATION, id);
 	},
 	async [CONFIG_ACTIONS.GET_CURRENT_CONFIGURATION]({commit}, id: number) {
-
+		console.log(id);
+		const cfg = await API.getFullConfiguration(id);
+		console.log(cfg);
+		if (!cfg) {
+			return false;
+		}
+		commit(CONFIG_MUTATIONS.SET_CURRENT_CONFIGURATION, cfg);
 	},
 };
 
@@ -72,5 +125,6 @@ export const config: Module<ConfigState, RootState> = {
 	state,
 	mutations,
 	actions,
+	getters,
 };
 

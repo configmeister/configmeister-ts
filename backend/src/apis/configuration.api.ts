@@ -24,4 +24,9 @@ export async function InitConfigurationApi() {
 		const result = await ConfigurationResolver.Destroy(req.body.id);
 		return res.json(result);
 	});
+
+	app.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/get-full`, async (req, res) => {
+		const result = await ConfigurationResolver.GetFull(req.body.id);
+		return res.json(result);
+	});
 }

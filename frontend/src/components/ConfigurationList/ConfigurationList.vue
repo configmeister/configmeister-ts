@@ -1,6 +1,6 @@
 <template>
 	<v-layout column>
-		<v-text-field label="Seach by name..." v-model="searchQuery" append-icon="mdi-magnify" class="seach-field mb-3 ml-0"></v-text-field>
+		<v-text-field label="Seach by name..." outlined v-model="searchQuery" append-icon="mdi-magnify" class="seach-field mb-3 ml-0"></v-text-field>
 		<v-layout row wrap v-if="configs.list.length">
 			<configuration-card v-for="config in configList" :key="config.id" v-bind="config"></configuration-card>
 		</v-layout>

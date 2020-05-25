@@ -108,4 +108,17 @@ export const API = {
 			};
 		}
 	},
+
+	async getFullConfiguration(id: number): ApiAnswer {
+		try {
+			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/get-full`, {id});
+			return res.data;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	},
 };

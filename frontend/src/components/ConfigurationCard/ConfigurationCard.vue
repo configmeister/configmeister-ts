@@ -37,6 +37,7 @@
 	import {Action}           from 'vuex-class';
 	import {CONFIG_ACTIONS}   from '@/utils/store/config.store';
 	import {CONFIG_NAMESPACE} from '@/utils/store/store';
+	import {CurrentLocation}  from '@/utils/lang';
 
 	@Component
 	export default class ConfigurationCard extends Vue {
@@ -50,7 +51,7 @@
 		private deleteInProcess: boolean = false;
 
 		get parseDate() {
-			return moment(this.updatedAt).format('DD.MM.YY HH:mm:ss');
+			return moment(this.updatedAt).format(CurrentLocation().timeFormat);
 		}
 
 		get getTo() {

@@ -36,9 +36,9 @@
 		"@types/express-session": "^1.17.0"
 	},
 	"scripts"        : {
-		"build-watch": "./node_modules/.bin/tsc --watch",
-		"build"      : "./node_modules/.bin/tsc",
-		"dev"        : "nodemon --watch ./dist/ ./dist/backend/src/index.js --dev",
-		"start"      : "node ./dist/backend/src/index.js --prop"
+		"back:build-watch": "./node_modules/.bin/tsc --watch",
+		"build"           : "./node_modules/.bin/tsc",
+		"back:dev"        : "nodemon --watch ./dist/ ./dist/backend/src/index.js --dev",
+		"start"           : "node ./dist/backend/src/index.js --prop"
 	}
 }
