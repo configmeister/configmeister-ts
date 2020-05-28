@@ -73,14 +73,14 @@ export const actions: ActionTree<ConfigState, RootState> = {
 		const res = await API.fetchConfigurations();
 		commit(CONFIG_MUTATIONS.SET_INITIAL_DATA, res);
 	},
-	async [CONFIG_ACTIONS.DELETE_CONFIGURATION]({commit}, id: number) {
+	async [CONFIG_ACTIONS.DELETE_CONFIGURATION]({commit}, id: string) {
 		const res = await API.deleteConfiguration(id);
 		if (res !== true) {
 			return;
 		}
 		commit(CONFIG_MUTATIONS.REMOVE_DELETED_CONFIGURATION, id);
 	},
-	async [CONFIG_ACTIONS.GET_CURRENT_CONFIGURATION]({commit}, id: number) {
+	async [CONFIG_ACTIONS.GET_CURRENT_CONFIGURATION]({commit}, id: string) {
 		console.log(id);
 		const cfg = await API.getFullConfiguration(id);
 		console.log(cfg);

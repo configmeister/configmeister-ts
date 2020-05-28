@@ -40,7 +40,7 @@
 
 		async mounted() {
 			await this.fetchUserData();
-			if (!this.user?.loggedIn && this.$route.path !== ROOTS.LOGIN) {
+			if (!this.user?.loggedIn && this.$route.path !== ROOTS.LOGIN && this.$route.path !== ROOTS.SETUP) {
 				await this.$router.push(ROOTS.LOGIN);
 			}
 			await this.fetchConfigData();

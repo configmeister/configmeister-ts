@@ -7,6 +7,7 @@ import {ConfigCard, Configuration, EScalarType, ICreateConfiguration, NODE_TYPE}
 import {Op}                                                                      from 'sequelize';
 import {VersionResolver}                                                         from './version.resolver';
 import {ScalarValueModel}                                                        from '../models/scalar-value.model';
+import {v1 as uuid}                                                              from 'uuid';
 
 export class ConfigurationResolver {
 	public static async GetFull(id: number): Promise<Configuration> {
@@ -52,7 +53,7 @@ export class ConfigurationResolver {
 		};
 	}
 
-	public static async Destroy(id: number): Promise<boolean> {
+	public static async Destroy(id: string): Promise<boolean> {
 		const versionIds = (await ConfigurationModel.findOne({
 			where:   {
 				id,
@@ -130,9 +131,10 @@ export class ConfigurationResolver {
 		}
 	}
 
-	public static async CreateNew(config: ICreateConfiguration): Promise<{ id: number } | { error: boolean, message: string, code?: ERROR }> {
+	public static async CreateNew(config: ICreateConfiguration): Promise<{ id: string } | { error: boolean, message: string, code?: ERROR }> {
 		try {
 			const createdConfiguration = await ConfigurationModel.create({
+				id:   uuid(),
 				name: config.name,
 			});
 			const createdVersion = await VersionResolver.CreateNew({

@@ -5,10 +5,12 @@ import {ScalarValueModel}                from '../models/scalar-value.model';
 import {Errorable}                       from '../../../common/errors';
 import {logger}                          from '../index';
 import {ScalarValueResolver}             from './scalar-value.resolver';
+import {v1 as uuid}                      from 'uuid';
 
 export class BranchResolver {
 	public static async CreateNew(props: ICreateBranch) {
 		return BranchModel.create({
+			id:        uuid(),
 			name:      props.name,
 			versionId: props.versionId,
 		});

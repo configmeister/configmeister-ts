@@ -5,6 +5,8 @@ import {ICreateUser}          from '../../../common/data-types';
 import {logger}               from '../index';
 import {UserPermissionsModel} from '../models/user-permissions.model';
 import {PermissionResolver}   from './permission.resolver';
+import {v1 as uuid}           from 'uuid';
+import {HAS_ADMIN_USER}       from '../middlewares/routes.mw';
 
 export class UserResolver {
 
@@ -25,6 +27,7 @@ export class UserResolver {
 	public static async CreateNewUser(data: ICreateUser): Promise<boolean> {
 		try {
 			const user = await UserModel.create({
+				id:       uuid(),
 				username: data.username,
 				password: data.password,
 				salt:     data.salt,
@@ -32,6 +35,7 @@ export class UserResolver {
 
 			for (let i = 0; i < data.roles.length; i++) {
 				await UserPermissionsModel.create({
+					id:           uuid(),
 					userId:       user.id,
 					permissionId: PermissionResolver.permissionsMap[data.roles[i]],
 				});

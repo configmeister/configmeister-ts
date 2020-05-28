@@ -77,7 +77,7 @@ export const API = {
 		}
 	},
 
-	async deleteConfiguration(id: number): ApiAnswer {
+	async deleteConfiguration(id: string): ApiAnswer {
 		try {
 			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/delete-configuration`, {
 				id,
@@ -109,7 +109,7 @@ export const API = {
 		}
 	},
 
-	async getFullConfiguration(id: number): ApiAnswer {
+	async getFullConfiguration(id: string): ApiAnswer {
 		try {
 			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/get-full`, {id});
 			return res.data;

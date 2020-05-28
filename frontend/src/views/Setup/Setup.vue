@@ -72,7 +72,7 @@
 				salt,
 			});
 			if (res) {
-				await this.$router.push('/');
+				await this.$router.push('/login');
 			}
 		}
 	}

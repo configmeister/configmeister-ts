@@ -1,5 +1,6 @@
 import {EScalarType, ICreateScalar} from '../../../common/data-types';
 import {ScalarValueModel}           from '../models/scalar-value.model';
+import {v1 as uuid}                 from 'uuid';
 
 export class ScalarValueResolver {
 	public static async CreateNew(value: ICreateScalar) {
@@ -15,6 +16,7 @@ export class ScalarValueResolver {
 				break;
 		}
 		return ScalarValueModel.create({
+			id:                 uuid(),
 			key:                value.key,
 			type:               value.type,
 			value:              value.value,

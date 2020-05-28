@@ -43,7 +43,7 @@
 		@Action(CONFIG_ACTIONS.GET_CURRENT_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) getCurrentConfiguration: any;
 
 		private loading: boolean = true;
-		private selectedVersion: number | undefined;
+		private selectedVersion: string | undefined;
 
 		get configurationLastUpdate(): string | undefined {
 			return moment(this.currentConfig?.updatedAt).format(CurrentLocation().timeFormat);

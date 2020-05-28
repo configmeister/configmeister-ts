@@ -26,7 +26,7 @@
 		@State(CONFIG_NAMESPACE) configState: ConfigState | undefined;
 		@Getter(CONFIG_GETTERS.CURRENT_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) currentConfig: Configuration | undefined;
 
-		@Prop({required: true}) selectedVersionId: number | undefined;
+		@Prop({required: true}) selectedVersionId: string | undefined;
 
 		get versionBranches() {
 			return this.currentConfig?.versions.find(v => v.id === this.selectedVersionId)?.branches || [];

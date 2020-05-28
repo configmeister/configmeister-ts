@@ -13,18 +13,20 @@
 </template>
 
 <script lang="ts">
-	import Vue                                           from 'vue';
-	import Component                                     from 'vue-class-component';
-	import {EComplexType, EScalarType, INode, NODE_TYPE} from '../../../../../common/data-types';
-	import {Watch}                                       from 'vue-property-decorator';
-	import {Getter}                                      from 'vuex-class';
-	import {CONFIG_GETTERS}                              from '@/utils/store/config.store';
-	import {CONFIG_NAMESPACE}                            from '@/utils/store/store';
-	import {API}                                         from '@/utils/api';
+	import Vue                                                          from 'vue';
+	import Component                                                    from 'vue-class-component';
+	import {Configuration, EComplexType, EScalarType, INode, NODE_TYPE} from '../../../../../common/data-types';
+	import {Watch}                                                      from 'vue-property-decorator';
+	import {Action, Getter, State}                                      from 'vuex-class';
+	import {CONFIG_ACTIONS, CONFIG_GETTERS}                             from '@/utils/store/config.store';
+	import {CONFIG_NAMESPACE}                                           from '@/utils/store/store';
+	import {API}                                                        from '@/utils/api';
 
 	@Component
 	export default class AddValue extends Vue {
+		@Action(CONFIG_ACTIONS.GET_CURRENT_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) getCurrentConfiguration: any;
 		@Getter(CONFIG_GETTERS.SELECTED_VALUE, {namespace: CONFIG_NAMESPACE}) selectedValue: INode | undefined;
+		@Getter(CONFIG_GETTERS.CURRENT_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) currentConfiguration: Configuration | any;
 
 		private nodeType: NODE_TYPE = NODE_TYPE.SCALAR;
 		private nodeTypes: NODE_TYPE[] = [
@@ -163,6 +165,7 @@
 				return;
 			}
 			this.clearInputs();
+			await this.getCurrentConfiguration(this.currentConfiguration.id);
 			this.addingValue = false;
 		}
 	}

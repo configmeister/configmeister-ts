@@ -4,7 +4,7 @@ import {RootState}                        from '@/utils/store/store';
 import {API}                              from '@/utils/api';
 
 export interface UserState {
-	id: number | null;
+	id: string | null;
 	username: string | null;
 	roles: Roles[];
 	loggedIn: boolean;
@@ -22,7 +22,7 @@ export enum USER_MUTATIONS {
 }
 
 export const mutations: MutationTree<UserState> = {
-	[USER_MUTATIONS.SET_USER_DATA](state, {id, username, roles, loggedIn}: { id: number, username: string, roles: Roles[], loggedIn: boolean }) {
+	[USER_MUTATIONS.SET_USER_DATA](state, {id, username, roles, loggedIn}: { id: string, username: string, roles: Roles[], loggedIn: boolean }) {
 		state.id = id || null;
 		state.username = username || null;
 		state.roles = roles || null;

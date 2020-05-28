@@ -30,8 +30,6 @@
 
 		@Prop({required: true, type: Object}) branch: Branch | undefined;
 
-		// private activeNode: INode[] = [];
-
 		get treeModel(): INode[] {
 			return [{
 				id:       this.branch?.id,

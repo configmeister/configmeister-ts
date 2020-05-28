@@ -16,7 +16,7 @@ export interface ICreateScalar {
 }
 
 export interface ConfigCard {
-	id: number;
+	id: string;
 	name: string;
 	updatedAt: Date;
 }
@@ -34,7 +34,7 @@ export interface ICreateVersion {
 
 export interface ICreateBranch {
 	name: string,
-	versionId: number
+	versionId: string
 }
 
 export enum EScalarType {
@@ -55,7 +55,7 @@ export enum NODE_TYPE {
 }
 
 export interface INode {
-	id?: number,
+	id?: string,
 	name?: string,
 	type?: EScalarType | EComplexType,
 	value?: any,
@@ -64,7 +64,7 @@ export interface INode {
 }
 
 export interface ScalarValue {
-	id: number,
+	id: string,
 	key: string,
 	type: EScalarType,
 	nodeType: NODE_TYPE,
@@ -72,19 +72,19 @@ export interface ScalarValue {
 }
 
 export interface Branch {
-	id: number;
+	id: string;
 	name: string;
 	scalarValues: ScalarValue[]
 }
 
 export interface Version {
-	id: number;
+	id: string;
 	label: string;
 	branches: Branch[];
 }
 
 export interface Configuration {
-	id: number;
+	id: string;
 	name: string;
 	updatedAt: Date;
 	versions: Version[];

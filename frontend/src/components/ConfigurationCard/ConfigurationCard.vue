@@ -42,7 +42,7 @@
 	@Component
 	export default class ConfigurationCard extends Vue {
 		@Prop({required: true}) name: string | undefined;
-		@Prop({required: true}) id: number | undefined;
+		@Prop({required: true}) id: string | undefined;
 		@Prop({required: true}) updatedAt: Date | undefined;
 
 		@Action(CONFIG_ACTIONS.DELETE_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) deleteConfig: any;
