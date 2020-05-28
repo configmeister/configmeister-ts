@@ -13,7 +13,7 @@
 	import Vue, {VueConstructor}              from 'vue';
 	import Component                          from 'vue-class-component';
 	import {Getter, State}                    from 'vuex-class';
-	import {CONFIG_GETTERS, INode}            from '@/utils/store/config.store';
+	import {CONFIG_GETTERS}                   from '@/utils/store/config.store';
 	import {CONFIG_NAMESPACE, USER_NAMESPACE} from '@/utils/store/store';
 	import {UserState}                        from '@/utils/store/user.store';
 	import ControlsValue                      from '@/components/ConfigurationControls/ControlsValue.vue';
@@ -22,6 +22,7 @@
 	import ControlsVersion                    from '@/components/ConfigurationControls/ControlsVersion.vue';
 	import ControlsConfiguration              from '@/components/ConfigurationControls/ControlsConfiguration.vue';
 	import ControlsExport                     from '@/components/ConfigurationControls/ControlsExport.vue';
+	import {INode}                            from '../../../../common/data-types';
 
 	export interface ITab {
 		tab: string,

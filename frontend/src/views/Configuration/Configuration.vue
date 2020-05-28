@@ -22,16 +22,17 @@
 </template>
 
 <script lang="ts">
-	import Vue                                                                            from 'vue';
-	import Component                                                                      from 'vue-class-component';
-	import {Action, Getter, State}                                                        from 'vuex-class';
-	import {CONFIG_NAMESPACE}                                                             from '@/utils/store/store';
-	import {CONFIG_ACTIONS, CONFIG_GETTERS, ConfigState, Configuration as IConfiguration} from '@/utils/store/config.store';
-	import LayoutColumn                                                                   from '@/layouts/LayoutColumn.vue';
-	import moment                                                                         from 'moment';
-	import {CurrentLocation}                                                              from '@/utils/lang';
-	import ConfigurationTreeView                                                          from '@/components/ConfigurationTreeView/ConfigurationTreeView.vue';
-	import ConfigurationControls                                                          from '@/components/ConfigurationControls/ConfigurationControls.vue';
+	import Vue                                           from 'vue';
+	import Component                                     from 'vue-class-component';
+	import {Action, Getter, State}                       from 'vuex-class';
+	import {CONFIG_NAMESPACE}                            from '@/utils/store/store';
+	import {CONFIG_ACTIONS, CONFIG_GETTERS, ConfigState} from '@/utils/store/config.store';
+	import LayoutColumn                                  from '@/layouts/LayoutColumn.vue';
+	import moment                                        from 'moment';
+	import {CurrentLocation}                             from '@/utils/lang';
+	import ConfigurationTreeView                         from '@/components/ConfigurationTreeView/ConfigurationTreeView.vue';
+	import ConfigurationControls                         from '@/components/ConfigurationControls/ConfigurationControls.vue';
+	import {Configuration as IConfiguration}             from '../../../../common/data-types';
 
 	@Component({
 		components: {ConfigurationControls, ConfigurationTreeView, LayoutColumn},

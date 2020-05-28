@@ -1,12 +1,16 @@
-import {AllowNull, BelongsTo, BelongsToMany, Column, ForeignKey, HasMany, HasOne, Model, Table} from 'sequelize-typescript';
-import {ScalarValueModel}                                                                       from './scalar-value.model';
-import {BranchModel}                                                                            from './branch.model';
-import {MixinModel}                                                                             from './mixin.model';
-import {MixinRootsModel}                                                                        from './mixin-roots.model';
-import {OverrideModel}                                                                          from './override.model';
+import {AllowNull, BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, HasOne, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {ScalarValueModel}                                                                                             from './scalar-value.model';
+import {BranchModel}                                                                                                  from './branch.model';
+import {MixinModel}                                                                                                   from './mixin.model';
+import {MixinRootsModel}                                                                                              from './mixin-roots.model';
+import {OverrideModel}                                                                                                from './override.model';
 
 @Table({tableName: 'complex_values'})
 export class ComplexValueModel extends Model<ComplexValueModel> {
+	@PrimaryKey
+	@Column(DataType.UUID)
+	id;
+
 	@AllowNull(false)
 	@Column
 	key: string;
@@ -16,10 +20,12 @@ export class ComplexValueModel extends Model<ComplexValueModel> {
 	type: string;
 
 	@ForeignKey(() => ComplexValueModel)
-	complexValueRootId: number;
+	@Column(DataType.UUID)
+	complexValueRootId;
 
 	@ForeignKey(() => BranchModel)
-	branchRootId: number;
+	@Column(DataType.UUID)
+	branchRootId;
 
 	@HasMany(() => ScalarValueModel)
 	scalarValues: ScalarValueModel[];

@@ -1,5 +1,6 @@
 import {PermissionModel} from '../models/permission.model';
 import {Roles}           from '../../../common/roles';
+import {v1 as uuid}      from 'uuid';
 
 export class PermissionResolver {
 
@@ -24,6 +25,7 @@ export class PermissionResolver {
 		const permissions = Object.values(Roles);
 		for (let i = 0; i < permissions.length; i++) {
 			await PermissionModel.create({
+				id:    uuid(),
 				label: permissions[i],
 			});
 		}

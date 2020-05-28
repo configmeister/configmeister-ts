@@ -1,8 +1,7 @@
-import {ICreateUser}                                                          from '../../../common/data-types';
+import {ICreateUser, INode, NODE_TYPE}                                        from '../../../common/data-types';
 import axios                                                                  from 'axios';
 import {API_ENDPOINT, API_VERSION, CONFIGURATION_API_PREFIX, USER_API_PREFIX} from '../../../common/endpoints';
 import {logger}                                                               from '@/utils/logger';
-import {INode}                                                                from '@/utils/store/config.store';
 
 export type ApiAnswer = Promise<any | { error: boolean, message: string }>
 
@@ -123,7 +122,7 @@ export const API = {
 		}
 	},
 
-	async validateValueToBeAdded(target: INode | undefined, nodeToAdd: { nodeType: string, nodeKey: string, itemType: string, itemValue?: string }): ApiAnswer {
+	async validateValueToBeAdded(target: INode | undefined, nodeToAdd: { nodeType: NODE_TYPE, nodeKey: string, itemType: string, itemValue?: any }): ApiAnswer {
 		try {
 			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/validate-value-to-be-added`, {
 				target,
@@ -141,7 +140,7 @@ export const API = {
 		}
 	},
 
-	async addValue(target: INode | undefined, nodeToAdd: { nodeType: string, nodeKey: string, itemType: string, itemValue?: string }): ApiAnswer {
+	async addValue(target: INode | undefined, nodeToAdd: { nodeType: NODE_TYPE, nodeKey: string, itemType: string, itemValue?: any }): ApiAnswer {
 		try {
 			const res = await axios.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/add-value`, {
 				target,

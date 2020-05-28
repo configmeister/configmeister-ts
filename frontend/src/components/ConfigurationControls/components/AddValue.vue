@@ -5,44 +5,38 @@
 		<v-layout row align-center class="pl-4 pr-4">
 			<v-select label="Item Type" :items="computedItemType" v-model="itemType" style="max-width: 200px;" class="mr-3"></v-select>
 			<template v-if="showItemValueInput">
-				<v-text-field label="Item Value" v-if="computedItemCanBeInputAsString" :type="valueInputType" v-model="itemValue" :error-messages="itemValueError"></v-text-field>
-				<v-checkbox v-else v-model="itemValue" label="Item Value"></v-checkbox>
+				<v-text-field label="Item Value" :type="valueInputType" v-model="itemValue" :error-messages="itemValueError"></v-text-field>
 			</template>
 		</v-layout>
-		<v-btn color="primary" @click="addValue">Submit</v-btn>
+		<v-btn color="primary" @click="addValue" :loading="addingValue">Submit</v-btn>
 	</v-layout>
 </template>
 
 <script lang="ts">
-	import Vue                         from 'vue';
-	import Component                   from 'vue-class-component';
-	import {EComplexType, EScalarType} from '../../../../../common/data-types';
-	import {Watch}                     from 'vue-property-decorator';
-	import {Getter}                    from 'vuex-class';
-	import {CONFIG_GETTERS, INode}     from '@/utils/store/config.store';
-	import {CONFIG_NAMESPACE}          from '@/utils/store/store';
-	import {API}                       from '@/utils/api';
-
-	export enum EItemType {
-		SCALAR  = 'Scalar',
-		COMPLEX = 'Complex'
-	}
+	import Vue                                           from 'vue';
+	import Component                                     from 'vue-class-component';
+	import {EComplexType, EScalarType, INode, NODE_TYPE} from '../../../../../common/data-types';
+	import {Watch}                                       from 'vue-property-decorator';
+	import {Getter}                                      from 'vuex-class';
+	import {CONFIG_GETTERS}                              from '@/utils/store/config.store';
+	import {CONFIG_NAMESPACE}                            from '@/utils/store/store';
+	import {API}                                         from '@/utils/api';
 
 	@Component
 	export default class AddValue extends Vue {
 		@Getter(CONFIG_GETTERS.SELECTED_VALUE, {namespace: CONFIG_NAMESPACE}) selectedValue: INode | undefined;
 
-		private nodeType: EItemType = EItemType.SCALAR;
-		private nodeTypes: EItemType[] = [
-			EItemType.SCALAR,
-			EItemType.COMPLEX,
+		private nodeType: NODE_TYPE = NODE_TYPE.SCALAR;
+		private nodeTypes: NODE_TYPE[] = [
+			NODE_TYPE.SCALAR,
+			NODE_TYPE.COMPLEX,
 		];
 
 		private itemKey: string = '';
 
 		private itemType: string = EScalarType.STRING;
 
-		private itemValue: string | number | boolean | undefined;
+		private itemValue: string = '';
 
 		private addingValue: boolean = false;
 		private nodeKeyError: string[] = [];
@@ -51,10 +45,10 @@
 		@Watch('nodeType')
 		watchNodeType() {
 			switch (this.nodeType) {
-				case EItemType.COMPLEX:
+				case NODE_TYPE.COMPLEX:
 					this.itemType = EComplexType.OBJECT;
 					break;
-				case EItemType.SCALAR:
+				case NODE_TYPE.SCALAR:
 					this.itemType = EScalarType.STRING;
 			}
 		}
@@ -64,15 +58,20 @@
 			this.nodeKeyError = [];
 		}
 
+		@Watch('itemValue')
+		watchItemValue() {
+			this.itemValueError = [];
+		}
+
 		get computedItemType(): string[] {
 			switch (this.nodeType) {
-				case EItemType.SCALAR:
+				case NODE_TYPE.SCALAR:
 					return [
 						EScalarType.BOOLEAN,
 						EScalarType.STRING,
 						EScalarType.NUMBER,
 					];
-				case EItemType.COMPLEX:
+				case NODE_TYPE.COMPLEX:
 					return [
 						EComplexType.ARRAY,
 						EComplexType.OBJECT,
@@ -83,15 +82,22 @@
 		}
 
 		get showItemValueInput() {
-			return this.nodeType === EItemType.SCALAR;
-		}
-
-		get computedItemCanBeInputAsString() {
-			return this.itemType !== EScalarType.BOOLEAN;
+			return this.nodeType === NODE_TYPE.SCALAR;
 		}
 
 		get valueInputType() {
 			return this.itemType === EScalarType.NUMBER ? 'number' : 'text';
+		}
+
+		preparedValue() {
+			switch (this.itemType) {
+				case EScalarType.STRING:
+					return this.itemValue;
+				case EScalarType.NUMBER:
+					return Number(this.itemValue);
+				case EScalarType.BOOLEAN:
+					return this.itemValue === 'true';
+			}
 		}
 
 		async validate(): Promise<boolean> {
@@ -99,9 +105,27 @@
 				this.nodeKeyError = ['Node Key must have at least 1 character'];
 				return false;
 			}
-			if (this.nodeType === EItemType.SCALAR && this.itemType !== EScalarType.BOOLEAN && (typeof this.itemValue !== this.itemType)) {
-				this.itemValueError = ['Please provide a valid value'];
-				return false;
+			if (this.nodeType === NODE_TYPE.SCALAR) {
+				switch (this.itemType) {
+					case EScalarType.STRING:
+						if ((this.itemValue as string).length === 0) {
+							this.itemValueError = ['Please provide a valid string'];
+							return false;
+						}
+						break;
+					case EScalarType.NUMBER:
+						if (Number.isNaN(Number(this.itemValue))) {
+							this.itemValueError = ['Please provide a valid value'];
+							return false;
+						}
+						break;
+					case EScalarType.BOOLEAN:
+						if (['true', 'false'].indexOf(this.itemValue) === -1) {
+							this.itemValueError = ['Value must be either "true" or "false"'];
+							return false;
+						}
+						break;
+				}
 			}
 
 
@@ -109,14 +133,20 @@
 				nodeType:  this.nodeType,
 				nodeKey:   this.itemKey,
 				itemType:  this.itemType,
-				itemValue: JSON.stringify(this.itemValue),
+				itemValue: this.preparedValue(),
 			});
 			return !(res && res.error);
+		}
+
+		clearInputs() {
+			this.itemKey = '';
+			this.itemValue = '';
 		}
 
 		async addValue() {
 			this.addingValue = true;
 			const res = await this.validate();
+			console.log('Validation:', res);
 			if (!res) {
 				this.addingValue = false;
 				return;
@@ -125,12 +155,15 @@
 				nodeType:  this.nodeType,
 				nodeKey:   this.itemKey,
 				itemType:  this.itemType,
-				itemValue: JSON.stringify(this.itemValue),
+				itemValue: this.preparedValue(),
 			});
+			console.log('Result:', result);
 			if (result && result.error) {
 				this.addingValue = false;
 				return;
 			}
+			this.clearInputs();
+			this.addingValue = false;
 		}
 	}
 </script>

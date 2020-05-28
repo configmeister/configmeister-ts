@@ -33,19 +33,20 @@ export async function InitModels() {
 		OverrideModel,
 	]);
 
-	await Session.sync({force: false});
-	await UserModel.sync({force: false});
-	await PermissionModel.sync({force: false});
-	await UserPermissionsModel.sync({force: false});
-	await ApiKeysModel.sync({force: false});
-	await ConfigurationModel.sync({force: false});
-	await VersionModel.sync({force: false});
-	await BranchModel.sync({force: false});
-	await OverrideModel.sync({force: false});
-	await ComplexValueModel.sync({force: false});
-	await MixinRootsModel.sync({force: false});
-	await MixinModel.sync({force: false});
-	await ScalarValueModel.sync({force: false});
+	await Session.sync({force: true});
+	await UserModel.sync({force: true});
+	await PermissionModel.sync({force: true});
+	await UserPermissionsModel.sync({force: true});
+	await ApiKeysModel.sync({force: true});
+	await ConfigurationModel.sync({force: true});
+	await VersionModel.sync({force: true});
+	await BranchModel.sync({force: true});
+	await ComplexValueModel.sync({force: true});
+	await MixinModel.sync({force: true});
+
+	await OverrideModel.sync({force: true});
+	await MixinRootsModel.sync({force: true});
+	await ScalarValueModel.sync({force: true});
 
 	await PermissionResolver.SetupPermissions();
 }

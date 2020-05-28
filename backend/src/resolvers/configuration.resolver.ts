@@ -1,12 +1,12 @@
-import {ConfigurationModel}               from '../models/configuration.model';
-import {VersionModel}                     from '../models/version.model';
-import {BranchModel}                      from '../models/branch.model';
-import {logger}                           from '../index';
-import {ERROR}                            from '../../../common/errors';
-import {ConfigCard, ICreateConfiguration} from '../../../common/data-types';
-import {Op}                               from 'sequelize';
-import {VersionResolver}                  from './version.resolver';
-import {Configuration}                    from '../../../frontend/src/utils/store/config.store';
+import {ConfigurationModel}                                                      from '../models/configuration.model';
+import {VersionModel}                                                            from '../models/version.model';
+import {BranchModel}                                                             from '../models/branch.model';
+import {logger}                                                                  from '../index';
+import {ERROR}                                                                   from '../../../common/errors';
+import {ConfigCard, Configuration, EScalarType, ICreateConfiguration, NODE_TYPE} from '../../../common/data-types';
+import {Op}                                                                      from 'sequelize';
+import {VersionResolver}                                                         from './version.resolver';
+import {ScalarValueModel}                                                        from '../models/scalar-value.model';
 
 export class ConfigurationResolver {
 	public static async GetFull(id: number): Promise<Configuration> {
@@ -17,7 +17,10 @@ export class ConfigurationResolver {
 			include: [{
 				model:   VersionModel,
 				include: [{
-					model: BranchModel,
+					model:   BranchModel,
+					include: [{
+						model: ScalarValueModel,
+					}],
 				}],
 			}],
 		});
@@ -31,8 +34,17 @@ export class ConfigurationResolver {
 					label:    version.label,
 					branches: version.branches.map(branch => {
 						return {
-							id:   branch.id,
-							name: branch.name,
+							id:           branch.id,
+							name:         branch.name,
+							scalarValues: branch.scalarValues.map(scalar => {
+								return {
+									id:       scalar.id,
+									key:      scalar.key,
+									type:     scalar.type as EScalarType,
+									value:    JSON.parse(scalar.value),
+									nodeType: NODE_TYPE.SCALAR,
+								};
+							}),
 						};
 					}),
 				};

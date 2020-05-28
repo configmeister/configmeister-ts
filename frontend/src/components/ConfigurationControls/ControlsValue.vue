@@ -13,13 +13,14 @@
 </template>
 
 <script lang="ts">
-	import Vue                                from 'vue';
-	import Component                          from 'vue-class-component';
-	import {Getter}                           from 'vuex-class';
-	import {CONFIG_GETTERS, INode, NODE_TYPE} from '@/utils/store/config.store';
-	import {CONFIG_NAMESPACE}                 from '@/utils/store/store';
-	import {CurrentLocation}                  from '@/utils/lang';
-	import AddValue                           from '@/components/ConfigurationControls/components/AddValue.vue';
+	import Vue                from 'vue';
+	import Component          from 'vue-class-component';
+	import {Getter}           from 'vuex-class';
+	import {CONFIG_GETTERS}   from '@/utils/store/config.store';
+	import {CONFIG_NAMESPACE} from '@/utils/store/store';
+	import {CurrentLocation}  from '@/utils/lang';
+	import AddValue           from '@/components/ConfigurationControls/components/AddValue.vue';
+	import {INode, NODE_TYPE} from '../../../../common/data-types';
 
 	@Component
 	export default class ControlsValue extends Vue {

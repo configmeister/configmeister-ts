@@ -1,16 +1,20 @@
-import {AllowNull, Column, ForeignKey, Model, Table} from 'sequelize-typescript';
-import {UserModel}                                   from './user.model';
-import {PermissionModel}                             from './permission.model';
+import {AllowNull, Column, DataType, ForeignKey, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {UserModel}                                                         from './user.model';
+import {PermissionModel}                                                   from './permission.model';
 
 @Table({tableName: 'user_roles'})
 export class UserPermissionsModel extends Model<UserPermissionsModel> {
+	@PrimaryKey
+	@Column(DataType.UUID)
+	id;
+
 	@AllowNull(false)
 	@ForeignKey(() => UserModel)
-	@Column
-	userId: number;
+	@Column(DataType.UUID)
+	userId;
 
 	@AllowNull(false)
 	@ForeignKey(() => PermissionModel)
-	@Column
-	permissionId: number;
+	@Column(DataType.UUID)
+	permissionId;
 }

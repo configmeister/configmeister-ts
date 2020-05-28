@@ -1,20 +1,24 @@
-import {AllowNull, Column, ForeignKey, Model, Table} from 'sequelize-typescript';
-import {MixinModel}                                  from './mixin.model';
-import {BranchModel}                                 from './branch.model';
-import {ComplexValueModel}                           from './complex-value.model';
+import {AllowNull, Column, DataType, ForeignKey, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {MixinModel}                                                        from './mixin.model';
+import {BranchModel}                                                       from './branch.model';
+import {ComplexValueModel}                                                 from './complex-value.model';
 
 @Table({tableName: 'mixin_roots'})
 export class MixinRootsModel extends Model<MixinRootsModel> {
+	@PrimaryKey
+	@Column(DataType.UUID)
+	id;
+
 	@AllowNull(false)
 	@ForeignKey(() => MixinModel)
-	@Column
-	mixinId: number;
+	@Column(DataType.UUID)
+	mixinId;
 
 	@ForeignKey(() => BranchModel)
-	@Column
-	branchId: number;
+	@Column(DataType.UUID)
+	branchId;
 
 	@ForeignKey(() => ComplexValueModel)
-	@Column
-	complexValueId: number;
+	@Column(DataType.UUID)
+	complexValueId;
 }

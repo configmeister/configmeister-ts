@@ -1,9 +1,13 @@
-import {AllowNull, BelongsToMany, Column, Model, Table} from 'sequelize-typescript';
-import {PermissionModel}                                from './permission.model';
-import {UserPermissionsModel}                           from './user-permissions.model';
+import {AllowNull, BelongsToMany, Column, DataType, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {PermissionModel}                                                      from './permission.model';
+import {UserPermissionsModel}                                                 from './user-permissions.model';
 
 @Table({tableName: 'users'})
 export class UserModel extends Model<UserModel> {
+	@PrimaryKey
+	@Column(DataType.UUID)
+	id;
+
 	@AllowNull(false)
 	@Column
 	username: string;

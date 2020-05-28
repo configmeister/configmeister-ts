@@ -1,9 +1,8 @@
 import {app}                                                 from '../server';
 import {API_ENDPOINT, API_VERSION, CONFIGURATION_API_PREFIX} from '../../../common/endpoints';
-import {ConfigurationResolver}                               from '../resolvers/configuration.resolver';
-import {ConfigCard}                                          from '../../../common/data-types';
-import {NODE_TYPE}                                           from '../../../frontend/src/utils/store/config.store';
-import {BranchResolver}                                      from '../resolvers/branch.resolver';
+import {ConfigurationResolver} from '../resolvers/configuration.resolver';
+import {ConfigCard, NODE_TYPE} from '../../../common/data-types';
+import {BranchResolver}        from '../resolvers/branch.resolver';
 
 export async function InitConfigurationApi() {
 	app.post(`${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/create-new`, async (req, res) => {

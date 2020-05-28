@@ -1,37 +1,8 @@
 import {ActionTree, GetterTree, Module, MutationTree} from 'vuex';
 import {RootState}                                    from '@/utils/store/store';
 import {API}                                          from '@/utils/api';
-import {ConfigCard}                                   from '../../../../common/data-types';
+import {ConfigCard, Configuration, INode}             from '../../../../common/data-types';
 
-
-export enum NODE_TYPE {
-	ROOT
-}
-
-export interface INode {
-	id?: number,
-	name?: string,
-	nodeType: NODE_TYPE,
-	children?: INode[],
-}
-
-export interface Branch {
-	id: number;
-	name: string;
-}
-
-export interface Version {
-	id: number;
-	label: string;
-	branches: Branch[];
-}
-
-export interface Configuration {
-	id: number;
-	name: string;
-	updatedAt: Date;
-	versions: Version[];
-}
 
 export interface ConfigState {
 	recent: ConfigCard[];
