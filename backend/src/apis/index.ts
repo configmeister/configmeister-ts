@@ -1,8 +1,7 @@
-import {InitUserApi} from './user.api';
-
-// import {InitConfigurationApi} from './configuration.api';
+import {InitUserApi}          from './user.api';
+import {InitConfigurationApi} from './configuration.api';
 
 export async function InitAPI() {
 	await InitUserApi();
-	// await InitConfigurationApi();
+	await InitConfigurationApi();
 }

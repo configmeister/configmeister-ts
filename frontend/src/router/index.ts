@@ -17,12 +17,12 @@ const routes: Array<RouteConfig> = [{
 	path:      ROOTS.SETUP,
 	name:      'setup',
 	component: () => import(/* webpackChunkName: "setup" */ '../views/Setup/Setup.vue'),
-}
-// }, {
-// 	path:      ROOTS.CREATE_CONFIGURATION,
-// 	name:      'create-configuration',
-// 	component: () => import(/* webpackChunkName: "createConfiguration" */ '../views/CreateConfiguration/CreateConfiguration.vue'),
-// }, {
+}, {
+	path:      ROOTS.CREATE_CONFIGURATION,
+	name:      'create-configuration',
+	component: () => import(/* webpackChunkName: "createConfiguration" */ '../views/CreateConfiguration/CreateConfiguration.vue'),
+},
+// {
 // 	path:      `${ROOTS.CONFIGURATION}:id`,
 // 	name:      'configuration',
 // 	component: () => import(/* webpackChunkName: "configuration" */ '../views/Configuration/Configuration.vue'),

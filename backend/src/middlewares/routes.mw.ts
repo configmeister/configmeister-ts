@@ -34,7 +34,23 @@ const ROUTES: IRoute[] = [{
 			res.redirect('/login');
 		},
 	],
-}];
+}, {
+	path:     '/create-configuration',
+	needAuth: true,
+} /*{
+ path:            '/configuration/:id',
+ needAuth:        true,
+ customResolvers: [
+ async (req, res, next) => {
+ const isConfigValid = await ConfigurationResolver.DoConfigExists(parseInt(req.params.id));
+ if (isConfigValid) {
+ return next();
+ }
+ res.status(404);
+ next();
+ },
+ ],
+ }*/];
 
 
 export async function InitRoutesMiddleware() {

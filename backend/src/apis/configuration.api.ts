@@ -63,3 +63,26 @@
 // 		res.json(result);
 // 	});
 // }
+
+import {API_ENDPOINT, API_VERSION, CONFIGURATION_API_PREFIX} from '../../../common/endpoints';
+import {app}                                                 from '../server';
+import {ConfigurationController}                             from '../controllers/configuration.controller';
+import {IError}                                              from '../../../common/types/common.types';
+import {IConfiguration}                                      from '../../../common/types/config.types';
+
+const prefix = (url: string) => {
+	return `${API_ENDPOINT}${API_VERSION}${CONFIGURATION_API_PREFIX}/${url}`;
+};
+
+export async function InitConfigurationApi() {
+	app.post(prefix('create'), async (req, res) => {
+		const config = await ConfigurationController.CreateNew(req.body);
+		if (!config || (config as IError).error) {
+			res.json((config as IError).error ? config : {
+				error:   true,
+				message: 'Unknown error',
+			});
+		}
+		res.json((config as IConfiguration)._id);
+	});
+}

@@ -3,7 +3,7 @@
 	"version"        : "0.1.0",
 	"private"        : true,
 	"scripts"        : {
-		"serve": "vue-cli-service serve",
+		"serve"            : "vue-cli-service serve",
 		"front:build-watch": "vue-cli-service build --watch --dest ../backend/dist/frontend"
 	},
 	"dependencies"   : {
@@ -17,7 +17,8 @@
 		"node-forge"            : "^0.9.1",
 		"axios"                 : "^0.19.2",
 		"vuex-class"            : "^0.3.2",
-		"moment"                : "^2.25.3"
+		"moment"                : "^2.25.3",
+		"mongoose"              : "^5.9.16"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel"     : "~4.3.0",
@@ -35,6 +36,7 @@
 		"@types/node-forge"         : "^0.9.3",
 		"@types/axios"              : "^0.14.0",
 		"@types/pbkdf2"             : "^3.0.0",
-		"@types/moment"             : "^2.13.0"
+		"@types/moment"             : "^2.13.0",
+		"@types/mongoose"           : "^5.7.21"
 	}
 }
