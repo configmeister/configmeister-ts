@@ -1,11 +1,14 @@
-import {Sequelize} from 'sequelize-typescript';
-import config      from '../../config.backend.json';
+import mongoose from 'mongoose';
 
-export const sequelize = new Sequelize({
-	database: config.db.dbName,
-	dialect:  'postgres',
-	username: config.db.dbUser,
-	password: config.db.dbPassword,
-	host:     config.db.dbHost,
-	port:     config.db.dbPort,
-});
+export const ConnectMongo = async (db: string) => {
+	const connect = async () => {
+		try {
+			await mongoose.connect(db, {useNewUrlParser: true});
+			console.log(`Connected to ${db}`);
+		} catch (e) {
+			console.error(e);
+		}
+		mongoose.connection.on('disconnected', connect);
+	};
+	await connect();
+};

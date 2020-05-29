@@ -1,25 +1,24 @@
-import {AllowNull, BelongsToMany, Column, DataType, Model, PrimaryKey, Table} from 'sequelize-typescript';
-import {PermissionModel}                                                      from './permission.model';
-import {UserPermissionsModel}                                                 from './user-permissions.model';
+import mongoose, {Schema} from 'mongoose';
+import {IUser}            from '../../../common/types/user.types';
 
-@Table({tableName: 'users'})
-export class UserModel extends Model<UserModel> {
-	@PrimaryKey
-	@Column(DataType.UUID)
-	id;
 
-	@AllowNull(false)
-	@Column
-	username: string;
+export const UserSchema: Schema = new Schema({
+	username: {
+		type:     String,
+		required: true,
+	},
+	password: {
+		type:     String,
+		required: true,
+	},
+	salt:     {
+		type:     String,
+		required: true,
+	},
+	roles:    {
+		type:     Array,
+		required: true,
+	},
+});
 
-	@AllowNull(false)
-	@Column
-	password: string;
-
-	@AllowNull(false)
-	@Column
-	salt: string;
-
-	@BelongsToMany(() => PermissionModel, () => UserPermissionsModel)
-	roles: PermissionModel[];
-}
+export const UserModel = mongoose.model<IUser>('users', UserSchema);

@@ -1,22 +1,16 @@
-import session              from 'express-session';
-import {app}                from '../server';
-import config               from '../../../config.backend.json';
-import ConnectPgSimpleConst from 'connect-pg-simple';
+import session      from 'express-session';
+import {app}        from '../server';
+import config       from '../../../config.backend.json';
+import ConnectMongo from 'connect-mongo';
+import mongoose     from 'mongoose';
 
 export async function InitSessionMiddleware() {
-	const ConnectPgSimple = ConnectPgSimpleConst(session);
+	const MongoStore = ConnectMongo(session);
 
 	app.use(session({
 		secret:            config.session.secret,
-		store:             new ConnectPgSimple({
-			tableName: 'sessions',
-			conObject: {
-				user:     config.db.dbUser,
-				host:     config.db.dbHost,
-				port:     config.db.dbPort,
-				database: config.db.dbName,
-				password: config.db.dbPassword,
-			},
+		store:             new MongoStore({
+			mongooseConnection: mongoose.connection,
 		}),
 		saveUninitialized: false,
 		resave:            true,

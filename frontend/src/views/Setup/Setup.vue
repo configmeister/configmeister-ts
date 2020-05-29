@@ -12,21 +12,22 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer></v-spacer>
-				<v-btn color="primary" text :disabled="!noErrors" @click="createUser">Submit</v-btn>
+				<v-btn color="primary" text :disabled="!noErrors" :loading="loading" @click="createUser">Submit</v-btn>
 			</v-card-actions>
 		</v-card>
 	</layout-center>
 </template>
 
 <script lang="ts">
-	import Vue            from 'vue';
-	import Component      from 'vue-class-component';
-	import LayoutCenter   from '@/layouts/LayoutCenter.vue';
-	import {Watch}        from 'vue-property-decorator';
-	import forge          from 'node-forge';
-	import {API}          from '@/utils/api';
-	import {Roles}        from '../../../../common/roles';
-	import {hashPassword} from '@/utils/funcs';
+	import Vue              from 'vue';
+	import Component        from 'vue-class-component';
+	import LayoutCenter     from '@/layouts/LayoutCenter.vue';
+	import {Watch}          from 'vue-property-decorator';
+	import forge            from 'node-forge';
+	import {hashPassword}   from '@/utils/funcs';
+	import {UserApi}        from '@/utils/api/user.api';
+	import {ERoles, IError} from '../../../../common/types/common.types';
+	import {ROOTS}          from '@/utils/roots';
 
 	@Component({
 		components: {
@@ -38,6 +39,7 @@
 		private password: string = '';
 		private confirmPassword: string = '';
 		private confirmationError: string[] = [];
+		private loading: boolean = false;
 
 		@Watch('password')
 		@Watch('confirmPassword')
@@ -58,22 +60,28 @@
 		}
 
 		async createUser() {
+			this.loading = true;
 			if (!this.noErrors) {
 				return;
 			}
 
 			const salt = await forge.random.getBytes(128);
 			const key = await hashPassword(this.password, salt);
-
-			const res = await API.createUser({
+			const res = await UserApi.CreateNew({
 				username: this.username,
 				password: key,
-				roles:    [Roles.admin],
 				salt,
+				roles:    [ERoles.admin],
 			});
-			if (res) {
-				await this.$router.push('/login');
+			if (!res || (res as IError).error) {
+				// do something with error and return;
+				this.loading = false;
+				return;
 			}
+			await this.$router.push({
+				path: ROOTS.LOGIN,
+			});
+			this.loading = false;
 		}
 	}
 </script>

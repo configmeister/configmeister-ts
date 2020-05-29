@@ -1,7 +1,6 @@
-import {app}                   from '../server';
-import {join}                  from 'path';
-import {UserResolver}          from '../resolvers/user.resolver';
-import {ConfigurationResolver} from '../resolvers/configuration.resolver';
+import {app}            from '../server';
+import {join}           from 'path';
+import {UserController} from '../controllers/user.controller';
 
 export interface IRoute {
 	path: string;
@@ -9,8 +8,6 @@ export interface IRoute {
 	redirect?: string;
 	customResolvers?: ((req, res, next) => void)[];
 }
-
-export let HAS_ADMIN_USER = false;
 
 const ROUTES: IRoute[] = [{
 	path:     '/',
@@ -20,8 +17,8 @@ const ROUTES: IRoute[] = [{
 }, {
 	path:            '/setup',
 	customResolvers: [
-		(req, res, next) => {
-			if (HAS_ADMIN_USER) {
+		async (req, res, next) => {
+			if (await UserController.HasAdminUser()) {
 				res.redirect('/');
 			} else {
 				next();
@@ -37,28 +34,10 @@ const ROUTES: IRoute[] = [{
 			res.redirect('/login');
 		},
 	],
-}, {
-	path:     '/create-configuration',
-	needAuth: true,
-}, {
-	path:            '/configuration/:id',
-	needAuth:        true,
-	customResolvers: [
-		async (req, res, next) => {
-			const isConfigValid = await ConfigurationResolver.DoConfigExists(parseInt(req.params.id));
-			if (isConfigValid) {
-				return next();
-			}
-			res.status(404);
-			next();
-		},
-	],
 }];
 
 
 export async function InitRoutesMiddleware() {
-	HAS_ADMIN_USER = await UserResolver.HasAdminUser();
-
 	const authCheck = async (req, res, next) => {
 		if (!req.session || !req.session.user || !req.session.user.loggedIn) {
 			res.redirect('/login');

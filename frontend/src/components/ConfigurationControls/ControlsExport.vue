@@ -1,17 +1,17 @@
-<template>
-	<div>Exports</div>
-</template>
+<!--<template>-->
+<!--	<div>Exports</div>-->
+<!--</template>-->
 
-<script lang="ts">
-	import Vue       from 'vue';
-	import Component from 'vue-class-component';
+<!--<script lang="ts">-->
+<!--	import Vue       from 'vue';-->
+<!--	import Component from 'vue-class-component';-->
 
-	@Component
-	export default class ControlsExport extends Vue {
+<!--	@Component-->
+<!--	export default class ControlsExport extends Vue {-->
 
-	}
-</script>
+<!--	}-->
+<!--</script>-->
 
-<style scoped>
+<!--<style scoped>-->
 
-</style>
+<!--</style>-->

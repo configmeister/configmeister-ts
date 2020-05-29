@@ -1,17 +1,17 @@
-<template>
-	<div>Version</div>
-</template>
+<!--<template>-->
+<!--	<div>Version</div>-->
+<!--</template>-->
 
-<script lang="ts">
-	import Vue       from 'vue';
-	import Component from 'vue-class-component';
+<!--<script lang="ts">-->
+<!--	import Vue       from 'vue';-->
+<!--	import Component from 'vue-class-component';-->
 
-	@Component
-	export default class ControlsVersion extends Vue {
+<!--	@Component-->
+<!--	export default class ControlsVersion extends Vue {-->
 
-	}
-</script>
+<!--	}-->
+<!--</script>-->
 
-<style scoped>
+<!--<style scoped>-->
 
-</style>
+<!--</style>-->

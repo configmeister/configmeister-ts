@@ -1,16 +1,12 @@
 {
-	"server"    : {
+	"server"     : {
 		"port": 9003,
 		"host": "0.0.0.0"
 	},
-	"db"        : {
-		"dbName"    : "cfg_ts",
-		"dbUser"    : "postgres",
-		"dbPassword": "gopniki6650556",
-		"dbHost"    : "localhost",
-		"dbPort"    : 5432
+	"db"         : {
+		"connectionString": "mongodb://localhost:27017/cfg_ts"
 	},
-	"session"   : {
+	"session"    : {
 		"secret": "testsecret"
 	},
 	"firstLaunch": true

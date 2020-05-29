@@ -1,45 +1,60 @@
-import {app}                                        from '../server';
-import {UserResolver}                               from '../resolvers/user.resolver';
+// import {app}                                        from '../server';
+// import {UserResolver}                               from '../resolvers/user.resolver';
+// import {API_ENDPOINT, API_VERSION, USER_API_PREFIX} from '../../../common/endpoints';
+// import {nop}                                        from '../utils/funcs';
+//
+//
+// export async function InitUserAPI() {
+// 	app.post(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/create`, async (req, res) => {
+// 		const result = await UserResolver.CreateNewUser(req.body);
+// 		res.json(result);
+// 	});
+//
+// 	app.post(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/get-salt`, async (req, res) => {
+// 		const result = await UserResolver.GetUserSalt(req.body.username);
+// 		res.json(result);
+// 	});
+//
+// 	app.post(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/login-user`, async (req, res) => {
+// 		const user = await UserResolver.LoginUser(req.body.username, req.body.password);
+// 		if (!user) {
+// 			res.json(false);
+// 			return;
+// 		}
+// 		req.session.user = {
+// 			id:       user.id,
+// 			username: user.username,
+// 			roles:    user.roles.map(el => el.label),
+// 			loggedIn: true,
+// 		};
+// 		await req.session.save(nop);
+// 		res.json(req.session.user);
+// 	});
+//
+// 	app.get(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/fetch-data`, async (req, res) => {
+// 		if (!req.session || !req.session.user || !req.session.user.loggedIn) {
+// 			res.json({
+// 				error:   true,
+// 				message: 'user not authed',
+// 			});
+// 			return;
+// 		}
+// 		res.json(req.session.user);
+// 	});
+//
+// }
+
 import {API_ENDPOINT, API_VERSION, USER_API_PREFIX} from '../../../common/endpoints';
-import {nop}                                        from '../utils/funcs';
+import {app}                                        from '../server';
+import {UserController}                             from '../controllers/user.controller';
 
+const prefix = (url: string) => {
+	return `${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/${url}`;
+};
 
-export async function InitUserAPI() {
-	app.post(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/create`, async (req, res) => {
-		const result = await UserResolver.CreateNewUser(req.body);
+export async function InitUserApi() {
+	app.post(prefix('create-user'), async (req, res) => {
+		const result = await UserController.CreateUser(req.body);
 		res.json(result);
 	});
-
-	app.post(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/get-salt`, async (req, res) => {
-		const result = await UserResolver.GetUserSalt(req.body.username);
-		res.json(result);
-	});
-
-	app.post(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/login-user`, async (req, res) => {
-		const user = await UserResolver.LoginUser(req.body.username, req.body.password);
-		if (!user) {
-			res.json(false);
-			return;
-		}
-		req.session.user = {
-			id:       user.id,
-			username: user.username,
-			roles:    user.roles.map(el => el.label),
-			loggedIn: true,
-		};
-		await req.session.save(nop);
-		res.json(req.session.user);
-	});
-
-	app.get(`${API_ENDPOINT}${API_VERSION}${USER_API_PREFIX}/fetch-data`, async (req, res) => {
-		if (!req.session || !req.session.user || !req.session.user.loggedIn) {
-			res.json({
-				error:   true,
-				message: 'user not authed',
-			});
-			return;
-		}
-		res.json(req.session.user);
-	});
-
 }

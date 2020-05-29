@@ -1,16 +1,16 @@
-<template>
-	<div>Branch</div>
-</template>
+<!--<template>-->
+<!--	<div>Branch</div>-->
+<!--</template>-->
 
-<script lang="ts">
-	import Vue       from 'vue';
-	import Component from 'vue-class-component';
+<!--<script lang="ts">-->
+<!--	import Vue       from 'vue';-->
+<!--	import Component from 'vue-class-component';-->
 
-	@Component
-	export default class ControlsBranch extends Vue {
-	}
-</script>
+<!--	@Component-->
+<!--	export default class ControlsBranch extends Vue {-->
+<!--	}-->
+<!--</script>-->
 
-<style scoped>
+<!--<style scoped>-->
 
-</style>
+<!--</style>-->
