@@ -3,4 +3,4 @@ export interface RootState {
 }
 
 export const USER_NAMESPACE = 'user';
-export const CONFIG_NAMESPACE = 'config';
+export const CONFIG_NAMESPACE = 'configurations';

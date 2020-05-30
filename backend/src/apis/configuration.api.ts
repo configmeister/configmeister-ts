@@ -85,4 +85,23 @@ export async function InitConfigurationApi() {
 		}
 		res.json((config as IConfiguration)._id);
 	});
+
+	app.post(prefix('fetch-all'), async (req, res) => {
+		const configs = await ConfigurationController.GetAll(req.body);
+		if (!configs || (configs as IError).error) {
+			res.json((configs as IError).error ? configs : {
+				error:   true,
+				message: 'Unknown error',
+			});
+		}
+		res.json(configs);
+	});
+
+	app.post(prefix('fetch-recent'), async (req, res) => {
+		res.json([]);
+	});
+
+	app.post(prefix('delete-by-id'), async (req, res) => {
+		res.json(await ConfigurationController.DeleteById(req.body.id));
+	});
 }

@@ -6,6 +6,36 @@ import {logger}                   from '../index';
 import {IBranch}                  from '../../../common/types/branch.types';
 
 export class VersionController {
+	public static async GetById(id: string): Promise<Errorable<IVersion>> {
+		try {
+			return VersionModel.findById(id);
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	}
+
+	public static async DeleteById(id: string): Promise<Errorable<boolean>> {
+		try {
+			const version = (await VersionController.GetById(id)) as IVersion;
+			if (version.branches.length) {
+				const proms = version.branches.map(el => BranchController.DeleteById(el));
+				await Promise.all(proms);
+			}
+			await VersionModel.findByIdAndDelete(version._id);
+			return true;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	}
+
 	public static async CreateNew(version: ICreateVersion): Promise<Errorable<IVersion>> {
 		try {
 			const branches = await BranchController.CreateMany(version.branches);

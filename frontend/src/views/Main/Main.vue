@@ -16,7 +16,6 @@
 		components: {ConfigurationList, UserRecentConfigurations, LayoutColumn},
 	})
 	export default class Main extends Vue {
-
 	}
 </script>
 

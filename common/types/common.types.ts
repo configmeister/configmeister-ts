@@ -9,4 +9,9 @@ export interface IError {
 	code?: number;
 }
 
+export interface IPagination {
+	limit?: number;
+	offset?: number;
+}
+
 export type Errorable<T> = T | IError;

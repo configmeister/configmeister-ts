@@ -26,6 +26,7 @@
 	import MainControlsDrawer                 from '@/components/MainControlsDrawer/MainControlsDrawer.vue';
 	import {IUserState}                       from '../../common/types/user.types';
 	import {USER_ACTIONS}                     from '@/utils/store/user.store';
+	import {CONFIG_ACTIONS}                   from '@/utils/store/config.store';
 
 	@Component({
 		components: {MainControlsDrawer, LayoutCenter},
@@ -34,12 +35,16 @@
 		private inited: boolean = false;
 		@State(USER_NAMESPACE) userState: IUserState | undefined;
 		@Action(USER_ACTIONS.FETCH_USER_DATA, {namespace: USER_NAMESPACE}) fetchUserData: any;
+		@Action(CONFIG_ACTIONS.FETCH_DATA, {namespace: CONFIG_NAMESPACE}) fetchConfigData: any;
 
 		async mounted() {
 			await this.fetchUserData();
 			if (!this.userState?.loggedIn && this.$route.path !== ROOTS.LOGIN && this.$route.path !== ROOTS.SETUP) {
 				await this.$router.push(ROOTS.LOGIN);
+				this.inited = true;
+				return;
 			}
+			await this.fetchConfigData();
 			this.inited = true;
 		}
 	}
