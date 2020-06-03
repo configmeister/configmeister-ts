@@ -6,6 +6,11 @@ export interface IBranch extends Document {
 	name: string;
 }
 
+export interface IBranchFull {
+	_id: IBranch['_id'];
+	name: IBranch['name'];
+}
+
 export interface ICreateBranch {
 	name: IBranch['name'];
 }

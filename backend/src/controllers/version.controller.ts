@@ -4,8 +4,26 @@ import {VersionModel}             from '../models/version.model';
 import {BranchController}         from './branch.controller';
 import {logger}                   from '../index';
 import {IBranch}                  from '../../../common/types/branch.types';
+import {mapAsync}                 from '../utils/funcs';
 
 export class VersionController {
+	public static async GetOneFull(id: string): Promise<Errorable<IVersion>> {
+		try {
+			const version = await VersionModel.findById(id);
+			return Object.assign(version, {
+				branches: await mapAsync(version.branches, async (branchId: string) => {
+					return await BranchController.GetOneFull(branchId);
+				}),
+			});
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	}
+
 	public static async GetById(id: string): Promise<Errorable<IVersion>> {
 		try {
 			return VersionModel.findById(id);

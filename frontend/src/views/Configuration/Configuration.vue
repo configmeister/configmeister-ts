@@ -1,76 +1,53 @@
-<!--<template>-->
-<!--	<layout-column fill-height>-->
-<!--		<v-overlay v-if="loading">-->
-<!--			<v-layout justify-center align-center>-->
-<!--				<v-progress-circular indeterminate color="secondary"></v-progress-circular>-->
-<!--			</v-layout>-->
-<!--		</v-overlay>-->
-<!--		<template v-else>-->
-<!--			<v-layout align-center class="top-row mb-6">-->
-<!--				<div class="title config-name mr-6">-->
-<!--					{{currentConfig.name}}-->
-<!--					<span class="caption grey&#45;&#45;text">Updated at: {{configurationLastUpdate}}</span>-->
-<!--				</div>-->
-<!--				<v-select label="Version" v-model="selectedVersion" :items="currentConfig.versions" item-text="label" item-value="id" outlined class="version-selector"></v-select>-->
-<!--			</v-layout>-->
-<!--			<v-layout justify-space-between>-->
-<!--				<configuration-tree-view :selected-version-id="selectedVersion"></configuration-tree-view>-->
-<!--				<configuration-controls></configuration-controls>-->
-<!--			</v-layout>-->
-<!--		</template>-->
-<!--	</layout-column>-->
-<!--</template>-->
+<template>
+	<layout-column fill-height>
+		<v-overlay v-if="loading">
+			<v-layout justify-center align-center>
+				<v-progress-circular indeterminate color="secondary"></v-progress-circular>
+			</v-layout>
+		</v-overlay>
+		<template v-else>
+			<configuration-header :configuration="configuration"></configuration-header>
+			<v-layout justify-space-between>
+				<configuration-tree-view :configuration="configuration"></configuration-tree-view>
+				<configuration-controls :configuration="configuration"></configuration-controls>
+			</v-layout>
+		</template>
+	</layout-column>
+</template>
 
-<!--<script lang="ts">-->
-<!--	import Vue                                           from 'vue';-->
-<!--	import Component                                     from 'vue-class-component';-->
-<!--	import {Action, Getter, State}                       from 'vuex-class';-->
-<!--	import {CONFIG_NAMESPACE}                            from '@/utils/store/store';-->
-<!--	import {CONFIG_ACTIONS, CONFIG_GETTERS, ConfigState} from '@/utils/store/config.store';-->
-<!--	import LayoutColumn                                  from '@/layouts/LayoutColumn.vue';-->
-<!--	import moment                                        from 'moment';-->
-<!--	import {CurrentLocation}                             from '@/utils/lang';-->
-<!--	import ConfigurationTreeView                         from '@/components/ConfigurationTreeView/ConfigurationTreeView.vue';-->
-<!--	import ConfigurationControls                         from '@/components/ConfigurationControls/ConfigurationControls.vue';-->
-<!--	import {Configuration as IConfiguration}             from '../../../../common/data-types';-->
+<script lang="ts">
+	import Vue                              from 'vue';
+	import Component                        from 'vue-class-component';
+	import LayoutColumn                     from '../../layouts/LayoutColumn.vue';
+	import {Action, Getter}                 from 'vuex-class';
+	import {CONFIG_ACTIONS, CONFIG_GETTERS} from '@/utils/store/config.store';
+	import {CONFIG_NAMESPACE}               from '@/utils/store/store';
+	import {IConfigurationFull}             from '../../../../common/types/config.types';
+	import {ConfigurationWrapper}           from '@/utils/wrappers/configuration.wrapper';
+	import ConfigurationHeader              from '@/views/Configuration/ConfigurationHeader.vue';
+	import ConfigurationTreeView            from '@/views/Configuration/ConfigurationTreeView.vue';
+	import ConfigurationControls            from '@/views/Configuration/ConfigurationControls.vue';
 
-<!--	@Component({-->
-<!--		components: {ConfigurationControls, ConfigurationTreeView, LayoutColumn},-->
-<!--	})-->
-<!--	export default class Configuration extends Vue {-->
-<!--		@State(CONFIG_NAMESPACE) configState: ConfigState | undefined;-->
-<!--		@Getter(CONFIG_GETTERS.CURRENT_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) currentConfig: IConfiguration | undefined;-->
-<!--		@Action(CONFIG_ACTIONS.GET_CURRENT_CONFIGURATION, {namespace: CONFIG_NAMESPACE}) getCurrentConfiguration: any;-->
+	@Component({
+		components: {ConfigurationControls, ConfigurationTreeView, ConfigurationHeader, LayoutColumn},
+	})
+	export default class Configuration extends Vue {
+		@Getter(CONFIG_GETTERS.GET_CURRENT, {namespace: CONFIG_NAMESPACE}) config: IConfigurationFull | undefined;
+		@Action(CONFIG_ACTIONS.FETCH_CURRENT, {namespace: CONFIG_NAMESPACE}) fetchCurrentConfiguration: any;
+		private loading: boolean = true;
+		private configuration: ConfigurationWrapper = new ConfigurationWrapper();
 
-<!--		private loading: boolean = true;-->
-<!--		private selectedVersion: string | undefined;-->
+		async mounted() {
+			await this.fetchCurrentConfiguration(this.$route.params.id);
+			if (!this.config) {
+				// go to 404
+				return;
+			}
+			this.configuration.updateRaw(this.config);
+			this.loading = false;
+		}
+	}
+</script>
 
-<!--		get configurationLastUpdate(): string | undefined {-->
-<!--			return moment(this.currentConfig?.updatedAt).format(CurrentLocation().timeFormat);-->
-<!--		}-->
-
-<!--		async mounted() {-->
-<!--			await this.getCurrentConfiguration(this.$route.params.id);-->
-<!--			this.selectedVersion = this.currentConfig?.versions[0].id;-->
-<!--			this.loading = false;-->
-<!--		}-->
-<!--	}-->
-<!--</script>-->
-
-<!--<style lang="scss" scoped>-->
-<!--	.config-name {-->
-<!--		width          : auto;-->
-<!--		position       : relative;-->
-<!--		display        : flex;-->
-<!--		flex-direction : column;-->
-<!--		top            : -16px;-->
-<!--	}-->
-
-<!--	.version-selector {-->
-<!--		max-width : 300px;-->
-<!--	}-->
-
-<!--	.top-row {-->
-<!--		max-height : 74px;-->
-<!--	}-->
-<!--</style>-->
+<style lang="scss" scoped>
+</style>

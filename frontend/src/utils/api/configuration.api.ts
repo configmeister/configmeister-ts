@@ -6,6 +6,10 @@ import {Errorable, IPagination}               from '../../../../common/types/com
 const {post, get} = createMethods(CONFIGURATION_API_PREFIX);
 
 export class ConfigurationApi {
+	public static async FetchCurrent(id: string): Promise<Errorable<IConfiguration>> {
+		return post('get-one-full', {id});
+	}
+
 	public static async CreateNew(configuration: ICreateConfiguration): Promise<Errorable<string>> {
 		return post('create', configuration);
 	}

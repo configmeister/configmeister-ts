@@ -4,8 +4,38 @@ import {ConfigurationModel}                   from '../models/configuration.mode
 import {VersionController}                    from './version.controller';
 import {IVersion}                             from '../../../common/types/version.types';
 import {logger}                               from '../index';
+import {mapAsync}                             from '../utils/funcs';
 
 export class ConfigurationController {
+	public static async GetOneFull(id: string): Promise<Errorable<IConfiguration>> {
+		try {
+			const config = await ConfigurationModel.findById(id);
+			return Object.assign(config, {
+				versions: await mapAsync(config.versions, async (versionId: string) => {
+					return await VersionController.GetOneFull(versionId);
+				}),
+			});
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	}
+
+	public static async ConfigExists(id: string): Promise<Errorable<boolean>> {
+		try {
+			return !!ConfigurationModel.findById(id);
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	}
+
 	public static async GetById(id: string): Promise<Errorable<IConfiguration>> {
 		try {
 			return ConfigurationModel.findById(id);

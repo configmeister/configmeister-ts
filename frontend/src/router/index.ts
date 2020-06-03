@@ -21,13 +21,11 @@ const routes: Array<RouteConfig> = [{
 	path:      ROOTS.CREATE_CONFIGURATION,
 	name:      'create-configuration',
 	component: () => import(/* webpackChunkName: "createConfiguration" */ '../views/CreateConfiguration/CreateConfiguration.vue'),
-},
-// {
-// 	path:      `${ROOTS.CONFIGURATION}:id`,
-// 	name:      'configuration',
-// 	component: () => import(/* webpackChunkName: "configuration" */ '../views/Configuration/Configuration.vue'),
-// }
-];
+}, {
+	path:      `${ROOTS.CONFIGURATION}:id`,
+	name:      'configuration',
+	component: () => import(/* webpackChunkName: "configuration" */ '../views/Configuration/Configuration.vue'),
+}];
 
 const router = new VueRouter({
 	mode: 'history',

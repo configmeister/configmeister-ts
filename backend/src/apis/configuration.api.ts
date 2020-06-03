@@ -104,4 +104,8 @@ export async function InitConfigurationApi() {
 	app.post(prefix('delete-by-id'), async (req, res) => {
 		res.json(await ConfigurationController.DeleteById(req.body.id));
 	});
+
+	app.post(prefix('get-one-full'), async (req, res) => {
+		res.json(await ConfigurationController.GetOneFull(req.body.id));
+	});
 }

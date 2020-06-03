@@ -4,6 +4,19 @@ import {Errorable}              from '../../../common/types/common.types';
 import {logger}                 from '../index';
 
 export class BranchController {
+	public static async GetOneFull(id: string): Promise<Errorable<IBranch>> {
+		try {
+			const branch = await BranchModel.findById(id);
+			return branch;
+		} catch (e) {
+			logger.error(e.message);
+			return {
+				error:   true,
+				message: e.message,
+			};
+		}
+	}
+
 	public static async GetById(id: string): Promise<Errorable<IBranch>> {
 		try {
 			return BranchModel.findById(id);
