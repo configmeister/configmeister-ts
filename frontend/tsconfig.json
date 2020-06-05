@@ -42,5 +42,8 @@
 	],
 	"exclude"        : [
 		"node_modules"
+	],
+	"files"          : [
+		"some-dymmy-file"
 	]
 }
